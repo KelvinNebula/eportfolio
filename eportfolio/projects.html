@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Portfolio — Projects</title>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Design tokens ===== */
+    :root{
+      --bg:#0B1220; --card:#0F1830; --text:#ECF2FF; --muted:#A9B7D9;
+      --accent:#96B3FF; --line:#20293D; --radius:16px;
+      --container: min(1280px, 95vw);   /* content can be wider here */
+      --shell:     min(1100px, 92vw);   /* header/footer width stays consistent */
+      --shell-pad: 12px;
+      --thumb-w: 30%;
+      --card-min-h:280px;
+
+      /* flowing ring controls */
+      --ring-thickness: 2px;           /* border thickness */
+      --ring-speed: 6s;                /* lower = faster */
+    }
+
+    /* ===== Base ===== */
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:#B8CCFF;text-decoration:none} a:hover{text-decoration:underline}
+    .container{width:var(--container);margin:0 auto}
+    .shell{width:var(--shell);margin:0 auto;padding:0 var(--shell-pad)}
+
+    html{ scrollbar-gutter: stable both-edges; }
+    @supports not (scrollbar-gutter: stable){ body{ overflow-y: scroll; } }
+
+    /* ===== Header (uniform) ===== */
+    .header{position:sticky;top:0;z-index:10;background:rgba(11,18,32,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .header .row{
+      display:grid; grid-template-columns:1fr auto 1fr;
+      align-items:center; gap:.8rem; padding:.8rem 0;
+    }
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700;justify-self:start}
+    .spark{width:18px;height:18px;border-radius:50%;background:linear-gradient(45deg,#9fd,#6af)}
+    .brand-title{color:#fff}
+    .brand-logo{ display:block; height:22px; width:auto; }
+    @media (max-width:480px){ .brand-logo{ height:20px; } }
+
+    .nav{display:flex;gap:.8rem;flex-wrap:nowrap;min-width:0;justify-content:center;justify-self:center}
+    .nav a{padding:.35rem .6rem;border-radius:10px;white-space:nowrap}
+    .nav a.active,.nav a:hover{background:#162036}
+
+    .actions{display:flex;gap:.6rem;justify-self:end}
+    .btn{
+      background:#2A334D;border:1px solid #3B4A75;color:#DCE6FF;border-radius:10px;
+      padding:.5rem .8rem;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;
+      white-space:nowrap;cursor:pointer
+    }
+    .btn:hover{background:#334060}
+
+    /* ===== Page ===== */
+    main{padding:1.6rem 0 2.2rem}
+    h1{font-size:2.2rem;line-height:1.2;text-align:center;margin:.4rem 0 1.2rem}
+
+    .grid{ display:grid; grid-template-columns:1fr; gap:1.2rem; align-items:start }
+
+    /* ===== Cards with flowing ring ===== */
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 3px 18px rgba(0,0,0,.25);
+      overflow:hidden;
+      position:relative; /* anchor ::before ring */
+      z-index:0;
+    }
+    /* Flowing gradient border (static frame) */
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:var(--radius);
+      padding:var(--ring-thickness);
+
+      background: linear-gradient(90deg, #9b59b6, #84cdfa, #5ad1cd, #9b59b6);
+      background-size: 300% 100%;
+      animation: border-flow var(--ring-speed) linear infinite;
+
+      /* make only the border visible */
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+
+      pointer-events:none;
+    }
+    @keyframes border-flow{
+      from{ background-position: 0% 50%; }
+      to  { background-position: 300% 50%; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card::before{ animation:none; }
+    }
+
+    /* ===== Project layout ===== */
+    .project{ display:flex; align-items:stretch; min-height: var(--card-min-h); padding:0 }
+
+    .thumb{
+      flex:0 0 var(--thumb-w);
+      min-height:var(--card-min-h);
+      position:relative; overflow:hidden;
+      border-right:1px solid var(--line);          /* divider; tweak or remove if you prefer */
+      background:#132041;
+      border-top-left-radius: var(--radius);       /* left corners match card */
+      border-bottom-left-radius: var(--radius);
+      z-index: 0;
+    }
+    .thumb-img{
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:contain; object-position:50% 20%;
+      display:block; background:#0B1220;
+    }
+
+    /* Flowing ring on the thumbnail panel */
+    .project .thumb::before{
+      content:"";
+      position:absolute; inset:0;
+      border-radius: var(--radius) 0 0 var(--radius); /* TL TR BR BL (left side rounded) */
+      padding: var(--ring-thickness);
+
+      background: linear-gradient(90deg, #9b59b6, #84cdfa, #5ad1cd, #9b59b6);
+      background-size: 300% 100%;
+      animation: border-flow var(--ring-speed) linear infinite;
+
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+
+      pointer-events: none;
+      z-index: 1;
+    }
+    @media (prefers-reduced-motion: reduce){
+      .project .thumb::before{ animation:none; }
+    }
+
+    .proj-body{ flex:1 1 calc(100% - var(--thumb-w)); padding:1rem 1.2rem }
+
+    /* mobile: stack image on top */
+    @media (max-width: 720px){
+      :root{ --thumb-w: 100%; --card-min-h: 220px; }
+      .project{ flex-direction:column }
+
+      .thumb{
+        flex:0 0 auto; width:100%; height:var(--card-min-h);
+        border-right:none; border-bottom:1px solid var(--line);
+        border-top-right-radius: var(--radius);      /* top corners rounded when stacked */
+        border-bottom-left-radius: 0;
+      }
+      .project .thumb::before{
+        border-radius: var(--radius) var(--radius) 0 0; /* TL TR BR BL */
+      }
+    }
+
+    .card-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 .35rem}
+    .card-head h3{margin:0}
+    .muted{color:var(--muted)}
+    .bullets{margin:.4rem 0 .2rem;padding-left:1.1rem}
+    .chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem}
+    .chip{background:#1a2646;border:1px solid #2a3f6b;padding:.15rem .5rem;border-radius:999px;font-size:.85rem}
+
+    /* ===== Footer ===== */
+    footer{border-top:1px solid var(--line);margin-top:3rem;padding:1rem 0;color:var(--muted);font-size:.95rem}
+
+    /* ===== Resume Modal (uniform) ===== */
+    .modal-overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center; z-index:999;
+    }
+    .modal-overlay.open{ display:flex; }
+    .modal{
+      width:min(1100px,96vw); height:min(860px,92vh);
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      box-shadow:0 10px 40px rgba(0,0,0,.5); display:flex; flex-direction:column; overflow:hidden;
+    }
+    .modal-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.6rem .8rem; border-bottom:1px solid var(--line);
+    }
+    .modal-header h3{ margin:0; font-size:1rem; font-weight:700; }
+    .iconbtn{
+      background:#2A334D; border:1px solid #3B4A75; color:#DCE6FF;
+      border-radius:10px; padding:.35rem .6rem; cursor:pointer;
+    }
+    .iconbtn:hover{ background:#334060; }
+    .viewer{ flex:1 1 auto; overflow:auto; }
+    .viewer iframe{ width:100%; height:100%; border:0; background:#0B1220; display:block; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="shell row">
+      <div class="brand">
+        <span class="spark" aria-hidden="true"></span>
+        <a class="brand-title" href="index.html" aria-label="Home">
+          <img class="brand-logo" src="assets/img/ChinKahMinLogo.png" alt="Chin Kah Min" />
+        </a>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">About Me</a>
+        <a href="plos.html">Learning Outcomes</a>
+        <a class="active" href="projects.html">Projects</a>
+        <a href="experience.html">Experience</a>
+        <a href="contact.html">Contact / Resume</a>
+      </nav>
+
+      <div class="actions">
+        <button class="btn" id="openResumeBtn" type="button">📄 View Resume</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <h1>Projects</h1>
+
+    <section class="grid">
+
+      <!-- Project 1 — Agentic AIoT LLM Dashboard & Mobile App (AGV + Acoustics) -->
+      <article id="p1" class="card project">
+        <div class="thumb">
+          <img src="assets/img/project-agv-acoustics.png" alt="AGV + Acoustics project" class="thumb-img">
+        </div>
+        <div class="proj-body">
+          <div class="card-head">
+            <h3>Agentic AIoT LLM Dashboard &amp; Mobile App</h3>
+            <span class="muted">2025</span>
+          </div>
+          <p>AIoT platform that connects an <strong>AGV</strong> and factory sensors to a web dashboard and mobile app for multi-modal monitoring, analysis, and predictive maintenance. Current focus: <strong>acoustics-based defect detection</strong> on industrial components.</p>
+          <ul class="bullets">
+            <li>Unified telemetry from the AGV (position, battery, motor current) and sensors (gas sensor and etc) into one stream.</li>
+            <li>Acoustics pipeline: streaming record sound → feature extraction (Mel-Spectrogram) → anomaly scoring &amp; defect classification.</li>
+            <li>Live website shows device state, sensor charts, events, and logs; mobile client syncs via <strong>WebSocket</strong>.</li>
+            <li>Agentic LLM workflows triage alerts and suggest checks/spare parts; device actions exposed via the <strong>MCP</strong> protocol.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">AGV</span><span class="chip">Acoustics</span><span class="chip">Predictive Maintenance</span>
+            <span class="chip">IoT</span><span class="chip">WebSocket</span><span class="chip">LLM</span><span class="chip">MCP</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 2：Machine vision based Plant Health monitoring -->
+      <article id="p2" class="card project">
+        <div class="thumb">
+          <img src="assets/img/project-plant-health.png" alt="Plant health monitoring project" class="thumb-img" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <div class="card-head">
+            <h3>Machine Vision–Based Plant Health Monitoring</h3>
+            <span class="muted">2025</span>
+          </div>
+          <p>Vision system to monitor crop health, classify issues, and support fertilization and seeding workflows.</p>
+          <ul class="bullets">
+            <li>Object detection / leaf-symptom analysis to flag early stress or disease.</li>
+            <li>Captured NPK test values and logged results for dosing decisions.</li>
+            <li>Integrated liquid NPK fertilization triggers and seeding record tracking.</li>
+            <li>Realtime dashboard with WebSocket connection; Flutter client for mobile access.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">OpenCV</span>
+            <span class="chip">IoT</span><span class="chip">Prototyping</span><span class="chip">WebSocket</span><span class="chip">Flutter</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 3 — Lexo Leg Exoskeleton -->
+      <article id="p3" class="card project">
+        <div class="thumb">
+          <img src="assets/img/project-lexo-leg.png" alt="Lexo Leg Exoskeleton project" class="thumb-img" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <div class="card-head">
+            <h3>Lexo Leg Exoskeleton</h3>
+            <span class="muted">2024</span>
+          </div>
+          <p>Semi-active lower-limb exoskeleton designed for older adults. The user initiates the step and the system adds timed assistance to reduce effort while preserving a natural gait.</p>
+          <ul class="bullets">
+            <li><strong>User-in-the-loop assist:</strong> power boost at the right phase instead of fully powered motion.</li>
+            <li><strong>Senior-friendly design:</strong> adjustable fit, comfortable strapping, simple don/doff, stability-focused.</li>
+            <li><strong>Iteration (V1 → V4):</strong> stiffness/weight, alignment, comfort, and assist smoothness.</li>
+            <li><strong>Outcome:</strong> more efficient steps with reduced perceived effort while keeping user control.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Assistive Tech</span><span class="chip">Exoskeleton</span>
+            <span class="chip">Semi-Active</span><span class="chip">Prototyping</span><span class="chip">SolidWorks</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 4 — DiveXtreme -->
+      <article id="p4" class="card project">
+        <div class="thumb">
+          <img src="assets/img/project-divextreme.png" alt="DiveXtreme concept project" class="thumb-img" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <div class="card-head">
+            <h3>DiveXtreme: Dive into Future Through Changeable Lens</h3>
+            <span class="muted">2023</span>
+          </div>
+          <p>Concept diving mask with modular lenses and safety features to improve awareness and usability across depths.</p>
+          <ul class="bullets">
+            <li><strong>Changeable lens</strong> modules for different eyesight needs.</li>
+            <li>Rearranged mask structure for improved sealing at depth (concept).</li>
+            <li><strong>Ultrasonic obstacle detection</strong> with alerting for safer dives.</li>
+            <li>Low-fi prototypes; scenario walkthroughs for recreation and training.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Product Design</span><span class="chip">Ultrasonic</span>
+            <span class="chip">Embedded</span><span class="chip">Safety</span><span class="chip">Prototyping</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 5 — Green Bio Blocks -->
+      <article id="p5" class="card project">
+        <div class="thumb">
+          <img src="assets/img/project-green-bio-blocks.jpg" alt="Green Bio Blocks project" class="thumb-img" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <div class="card-head">
+            <h3>Green Bio Blocks</h3>
+            <span class="muted">2023</span>
+          </div>
+          <p>Eco-friendly brick concept turning wastepaper into useful material, with automation for consistency, lower cost, and scalability.</p>
+          <ul class="bullets">
+            <li><strong>Waste management:</strong> converts wastepaper into pulp, reducing landfill load.</li>
+            <li><strong>Cleaner materials:</strong> partial cement substitution to reduce dust/health concerns.</li>
+            <li><strong>Automation:</strong> collection → shredding → precise mixing → molding → curing.</li>
+            <li><strong>Consistent quality:</strong> monitored ratios and process control.</li>
+            <li><strong>Cost-effective</strong> and <strong>scalable</strong> with swappable molds/recipes.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Sustainability</span><span class="chip">Wastepaper</span>
+            <span class="chip">Automation</span><span class="chip">Microcontrollers</span>
+            <span class="chip">Sensors</span><span class="chip">Quality Control</span>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="shell">© 2025 E-Portfolio. Built with HTML/CSS/JAVASCRPT.</div>
+  </footer>
+
+  <!-- Resume Modal -->
+  <div class="modal-overlay" id="resumeModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="resumeTitle">
+      <div class="modal-header">
+        <h3 id="resumeTitle">Resume — Chin Kah Min</h3>
+        <button class="iconbtn" id="closeResumeBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="viewer">
+        <iframe src="Resume.pdf#toolbar=0&navpanes=0&view=FitH" title="Resume PDF"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const openBtn = document.getElementById('openResumeBtn');
+      const closeBtn = document.getElementById('closeResumeBtn');
+      const overlay = document.getElementById('resumeModal');
+      function open(){ overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+      function close(){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+      openBtn?.addEventListener('click', open);
+      closeBtn?.addEventListener('click', close);
+      overlay?.addEventListener('click', (e)=>{ if(e.target===overlay) close(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+    })();
+  </script>
+</body>
+</html>

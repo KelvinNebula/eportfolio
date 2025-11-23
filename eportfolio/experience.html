@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Portfolio — Experience</title>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Design tokens ===== */
+    :root{
+      --bg:#0B1220; --card:#0F1830; --text:#ECF2FF; --muted:#A9B7D9;
+      --accent:#96B3FF; --line:#20293D; --radius:16px;
+      --container:min(1100px,92vw);
+      --shell:min(1100px,92vw);
+      --shell-pad:12px;
+
+      /* flowing ring controls */
+      --ring-thickness: 2px;   /* border thickness */
+      --ring-speed: 6s;        /* lower = faster */
+    }
+
+    /* ===== Base ===== */
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:#B8CCFF;text-decoration:none} a:hover{text-decoration:underline}
+    .container{width:var(--container);margin:0 auto}
+    .shell{width:var(--shell);margin:0 auto;padding:0 var(--shell-pad)}
+
+    /* Keep layout stable when vertical scrollbar appears */
+    html{scrollbar-gutter: stable both-edges;}
+    @supports not (scrollbar-gutter: stable){ body{overflow-y:scroll;} }
+
+    /* ===== Header / Nav (uniform across pages) ===== */
+    .header{position:sticky;top:0;z-index:10;background:rgba(11,18,32,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .header .row{
+      display:grid;
+      grid-template-columns:1fr auto 1fr; /* left / center / right */
+      align-items:center; gap:.8rem; padding:.8rem 0;
+    }
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700;justify-self:start}
+    .spark{width:18px;height:18px;border-radius:50%;background:linear-gradient(45deg,#9fd,#6af)}
+    .brand-title{color:#fff}
+    .brand-logo{display:block;height:22px;width:auto}
+    @media (max-width:480px){ .brand-logo{height:20px} }
+
+    .nav{display:flex;gap:.8rem;flex-wrap:nowrap;min-width:0;justify-content:center;justify-self:center}
+    .nav a{padding:.35rem .6rem;border-radius:10px;white-space:nowrap}
+    .nav a.active,.nav a:hover{background:#162036}
+
+    .actions{display:flex;gap:.6rem;justify-self:end}
+    .btn{
+      background:#2A334D;border:1px solid #3B4A75;color:#DCE6FF;border-radius:10px;
+      padding:.5rem .8rem;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;
+      white-space:nowrap;cursor:pointer
+    }
+    .btn:hover{background:#334060}
+
+    /* ===== Page layout ===== */
+    main{padding:1.8rem 0 2.4rem}
+    h1{font-size:2.2rem;line-height:1.2;text-align:center;margin:.4rem 0 1.4rem}
+
+    /* Section titles */
+    .section-title{
+      width:100%;text-align:left;font-size:1.4rem;font-weight:700;
+      margin:1.6rem auto .8rem;padding-bottom:.35rem;border-bottom:2px solid var(--line);
+    }
+
+    /* ===== Experience cards ===== */
+    .xp{display:grid;gap:1.2rem}
+    .xp-card{
+      width:100%;max-width:900px;margin-inline:auto;
+      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:0 3px 18px rgba(0,0,0,.25);
+      padding:1rem 1.2rem;min-height:260px;
+      display:grid;grid-template-rows:auto auto 1fr;
+      position:relative;overflow:hidden;z-index:0; /* needed for flowing ring */
+    }
+    /* Flowing gradient border (static frame) */
+    .xp-card::before{
+      content:"";
+      position:absolute;inset:0;border-radius:var(--radius);
+      padding:var(--ring-thickness);
+
+      background:linear-gradient(90deg,#9b59b6,#84cdfa,#5ad1cd,#9b59b6);
+      background-size:300% 100%;
+      animation:border-flow var(--ring-speed) linear infinite;
+
+      /* mask so only the ring (border) shows */
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+
+      pointer-events:none;
+    }
+    @keyframes border-flow{
+      from{background-position:0% 50%}
+      to{background-position:300% 50%}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .xp-card::before{animation:none}
+    }
+
+    .xp-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:0 0 .4rem}
+    .title{font-weight:700;font-size:1.1rem;margin:0}
+    .period{color:var(--muted);white-space:nowrap}
+    .company{display:block;color:#BFD0FF;margin:.15rem 0 .4rem}
+    .bullets{margin:.2rem 0 0;padding-left:1.1rem}
+    .bullets li{margin:.25rem 0}
+
+
+    /* ===== Hard Skills section ===== */
+    .skills-section-title{
+      width:100%;
+      text-align:left;
+      font-size:1.4rem;
+      font-weight:700;
+      margin:1.8rem auto .8rem;
+      padding-bottom:.35rem;
+      border-bottom:2px solid var(--line);
+    }
+
+    /* reuse xp-card border but override layout for skills cards */
+    .skills-card{
+      max-width:900px;
+      margin-inline:auto;
+      margin-top:0.6rem;
+      display:block;
+      min-height:0;
+      padding:1rem 1.2rem;
+    }
+
+    .skills-subheading{
+      font-size:1.05rem;
+      font-weight:600;
+      margin:0 0 .6rem;
+    }
+
+    .skills-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr)); /* 4 columns per row */
+      gap:.35rem .75rem;
+      align-items:center;
+      font-size:.95rem;
+    }
+
+    .skill-name{
+      font-weight:500;
+      font-size:0.9rem;
+    }
+
+    .skill-stars{
+      font-size:1.1rem;
+      letter-spacing:1px;
+    }
+
+    .star-filled{ color:#FFD54A; }
+    .star-empty{ color:#8F8F99; }
+
+    .skills-separator{
+      grid-column:1 / -1;
+      border-top:1px dashed rgba(255,255,255,0.35);
+      margin:.4rem 0 .2rem;
+    }
+
+    @media (max-width: 700px){
+      /* on smaller screens, 1 skill per row => 2 columns (name + stars) */
+      .skills-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+
+    /* ===== Footer ===== */
+    footer{border-top:1px solid var(--line);margin-top:3rem;padding:1rem 0;color:var(--muted);font-size:.95rem}
+
+    /* ===== Resume Modal (single viewer) ===== */
+    .modal-overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center; z-index:999;
+    }
+    .modal-overlay.open{ display:flex; }
+    .modal{
+      width:min(1100px,96vw); height:min(860px,92vh);
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      box-shadow:0 10px 40px rgba(0,0,0,.5); display:flex; flex-direction:column; overflow:hidden;
+    }
+    .modal-header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.6rem .8rem; border-bottom:1px solid var(--line);
+    }
+    .modal-header h3{ margin:0; font-size:1rem; font-weight:700; }
+    .iconbtn{
+      background:#2A334D; border:1px solid #3B4A75; color:#DCE6FF;
+      border-radius:10px; padding:.35rem .6rem; cursor:pointer;
+    }
+    .iconbtn:hover{ background:#334060; }
+    .viewer{ flex:1 1 auto; overflow:auto; }
+    .viewer iframe{ width:100%; height:100%; border:0; background:#0B1220; display:block; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="shell row">
+      <div class="brand">
+        <span class="spark" aria-hidden="true"></span>
+        <a class="brand-title" href="index.html" aria-label="Home">
+          <!-- Brand image logo -->
+          <img class="brand-logo" src="assets/img/ChinKahMinLogo.png" alt="Chin Kah Min" />
+        </a>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">About Me</a>
+        <a href="plos.html">Learning Outcomes</a>
+        <a href="projects.html">Projects</a>
+        <a class="active" href="experience.html">Experience</a>
+        <a href="contact.html">Contact / Resume</a>
+      </nav>
+
+      <div class="actions">
+        <button class="btn" id="openResumeBtn" type="button">📄 View Resume</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <h1>Experience</h1>
+
+    <!-- Tech-Relevant Roles -->
+    <h2 class="section-title">Tech-Relevant Roles</h2>
+    <section class="xp">
+
+      <!-- IoTech Solutions — Research Assistant -->
+      <article class="xp-card">
+        <div class="xp-head">
+          <h2 class="title">Research Assistant</h2>
+          <span class="period">Mar 2023 – Present</span>
+        </div>
+        <a class="company" href="#" rel="noopener">IoTech Solutions</a>
+        <ul class="bullets">
+          <li>Developed and tested IoT prototypes for sensor data capture and device connectivity.</li>
+          <li>Analyzed telemetry to improve system efficiency and reliability; documented test results and process.</li>
+          <li>Optimized firmware/network behavior to strengthen end-to-end functionality.</li>
+          <li>Prototyped sensor nodes (e.g., ESP32) and configured MQTT topics/QoS for stable streaming.</li>
+          <li>Built simple dashboards to visualize live metrics and device states for trials.</li>
+          <li>Wrote setup &amp; safety SOPs; used version control to track hardware/firmware revisions.</li>
+        </ul>
+      </article>
+
+      <!-- AMZ Online Sdn Bhd — Graphic Designer -->
+      <article class="xp-card">
+        <div class="xp-head">
+          <h2 class="title">Graphic Designer</h2>
+          <span class="period">May 2025 – Present</span>
+        </div>
+        <a class="company" href="#" rel="noopener">AMZ Online Sdn Bhd</a>
+        <ul class="bullets">
+          <li>Designed marketing posters and before/after creatives aligned with brand requirements.</li>
+          <li>Prepared digital assets and iterated quickly from feedback to final delivery.</li>
+          <li>Performed photo retouching and layout adjustments for multiple social sizes (IG, FB, Stories).</li>
+          <li>Followed brand guidelines; exported web-optimized assets (PNG/JPG/SVG) with proper color profile.</li>
+        </ul>
+      </article>
+
+      <!-- STMicroelectronics Sdn Bhd — IT Internship -->
+      <article class="xp-card">
+        <div class="xp-head">
+          <h2 class="title">IT Intern</h2>
+          <span class="period">Oct 2024 – Mar 2025</span>
+        </div>
+        <a class="company" href="#" rel="noopener">STMicroelectronics Sdn Bhd</a>
+        <ul class="bullets">
+          <li>Troubleshot user/system issues and supported routine system maintenance.</li>
+          <li>Built a small internal website with a MySQL database to track information.</li>
+          <li>Helped maintain reliable network performance through structured operations and documentation.</li>
+          <li>Logged tickets and resolutions; prepared step-by-step notes to speed up future fixes.</li>
+          <li>Assisted inventory of devices and basic scripts for backup/updates under supervision.</li>
+        </ul>
+      </article>
+
+      <!-- Asia AeroTechnic — Junior Technician (Internship) -->
+      <article class="xp-card">
+        <div class="xp-head">
+          <h2 class="title">Junior Technician (Internship)</h2>
+          <span class="period">Jun 2020 – Dec 2020</span>
+        </div>
+        <a class="company" href="#" rel="noopener">Asia AeroTechnic</a>
+        <ul class="bullets">
+          <li>Performed inspections and maintenance (landing gear replacement, wing checks, cockpit system testing).</li>
+          <li>Managed maintenance documentation and assisted with administrative tasks.</li>
+          <li>Supported tooling/housekeeping and inventory control for the maintenance team.</li>
+          <li>Adhered to AMM/SRM procedures and safety practices; coordinated with licensed engineers.</li>
+          <li>Helped track tool calibration logs and parts usage to ensure compliance.</li>
+        </ul>
+      </article>
+
+    </section>
+
+    <!-- Earlier Roles -->
+    <h2 class="section-title">Earlier Roles</h2>
+    <section class="xp">
+
+      <!-- BKH Statue Trading Sdn Bhd — Sales / Assistant Manager -->
+      <article class="xp-card">
+        <div class="xp-head">
+          <h2 class="title">Sales / Assistant Manager</h2>
+          <span class="period">Jan 2021 – Dec 2021</span>
+        </div>
+        <a class="company" href="#" rel="noopener">BKH Statue Trading Sdn Bhd</a>
+        <ul class="bullets">
+          <li>Led price discussions and negotiations to reach favorable outcomes.</li>
+          <li>Resolved issues autonomously and maintained strong customer relationships.</li>
+          <li>Prepared simple sales reports and coordinated stock requests with suppliers.</li>
+        </ul>
+      </article>
+
+      <!-- Whole Fruit Market — Cashier -->
+      <article class="xp-card">
+        <div class="xp-head">
+          <h2 class="title">Cashier</h2>
+          <span class="period">Jan 2018 – Feb 2018</span>
+        </div>
+        <a class="company" href="#" rel="noopener">Whole Fruit Market</a>
+        <ul class="bullets">
+          <li>Delivered friendly customer service; handled transactions accurately and efficiently.</li>
+          <li>Maintained cash integrity and supported daily retail operations.</li>
+          <li>Assisted with display arrangement and basic inventory checks during closing.</li>
+        </ul>
+      </article>
+
+    </section>
+
+    <!-- Hard Skills -->
+    <h2 class="skills-section-title">Hard Skills</h2>
+
+    <section class="xp">
+
+      <!-- a) Program Language -->
+      <article class="xp-card skills-card" aria-labelledby="skills-prog">
+        <h3 id="skills-prog" class="skills-subheading">Program Language</h3>
+        <div class="skills-grid" aria-label="Programming languages and skill levels">
+
+          <div class="skill-name">Python</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">C</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">C++</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">R Programming</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skills-separator"></div>
+
+          <div class="skill-name">Java</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">JavaScript</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">CSS</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">HTML</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skills-separator"></div>
+
+          <div class="skill-name">Large Language Model (LLM)</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+        </div>
+      </article>
+
+      <!-- b) Software Simulation, Design & Others -->
+      <article class="xp-card skills-card" aria-labelledby="skills-soft">
+        <h3 id="skills-soft" class="skills-subheading">Software Simulation, Design &amp; Others</h3>
+        <div class="skills-grid" aria-label="Software tools and skill levels">
+
+          <div class="skill-name">Cadence</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Quartus Prime</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">LTSpice</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Multisim</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skills-separator"></div>
+
+          <div class="skill-name">Flux</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">MATLAB</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Simulink</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">LabView</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skills-separator"></div>
+
+          <div class="skill-name">Cisco Packet Tracer</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Apache NetBeans IDE 17</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">SolidWorks</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Blynk</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skills-separator"></div>
+
+          <div class="skill-name">Arduino IDE / Cloud IoT</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Mediapipe</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">OpenCV</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">MySQL</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skills-separator"></div>
+
+          <div class="skill-name">AWS</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+          <div class="skill-name">Altair AI Studio (RapidMiner)</div>
+          <div class="skill-stars">
+            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          </div>
+
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="shell" style="padding:0 var(--shell-pad)">© 2025 E-Portfolio. Built with HTML/CSS/JAVASCRPT.</div>
+  </footer>
+
+  <!-- ===== Resume Modal ===== -->
+  <div class="modal-overlay" id="resumeModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="resumeTitle">
+      <div class="modal-header">
+        <h3 id="resumeTitle">Resume — Chin Kah Min</h3>
+        <button class="iconbtn" id="closeResumeBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="viewer">
+        <iframe src="Resume.pdf#toolbar=0&navpanes=0&view=FitH" title="Resume PDF"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const openBtn = document.getElementById('openResumeBtn');
+      const closeBtn = document.getElementById('closeResumeBtn');
+      const overlay = document.getElementById('resumeModal');
+
+      function openModal(){
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal(){
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+
+      openBtn?.addEventListener('click', openModal);
+      closeBtn?.addEventListener('click', closeModal);
+      overlay?.addEventListener('click', (e)=>{ if(e.target === overlay){ closeModal(); }});
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ closeModal(); }});
+    })();
+  </script>
+</body>
+</html>
