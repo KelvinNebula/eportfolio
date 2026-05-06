@@ -156,12 +156,35 @@
     }
 
     .skill-stars{
-      font-size:1.1rem;
-      letter-spacing:1px;
+      display:flex;
+      gap:.35rem;
+      align-items:center;
+      font-size:0;
     }
 
-    .star-filled{ color:#FFD54A; }
-    .star-empty{ color:#8F8F99; }
+    .skill-stars span{
+      display:inline-flex;
+      width:.85rem;
+      height:.85rem;
+      border-radius:50%;
+      background:#8F8F99;
+    }
+
+    .circle-filled{ background:#FFD54A; }
+    .circle-empty{ background:#8F8F99; }
+
+    .skills-screenshot{
+      min-height:220px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      border:1px dashed rgba(255,255,255,0.2);
+      border-radius:14px;
+      padding:1.4rem;
+      color:var(--muted);
+      background:rgba(255,255,255,0.02);
+    }
 
     .skills-separator{
       grid-column:1 / -1;
@@ -351,52 +374,52 @@
         <div class="skills-grid" aria-label="Programming languages and skill levels">
 
           <div class="skill-name">Python</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">C</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">C++</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">R Programming</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skills-separator"></div>
 
           <div class="skill-name">Java</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">JavaScript</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">CSS</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span>
           </div>
 
           <div class="skill-name">HTML</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span>
           </div>
 
           <div class="skills-separator"></div>
 
           <div class="skill-name">Large Language Model (LLM)</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
         </div>
@@ -408,113 +431,121 @@
         <div class="skills-grid" aria-label="Software tools and skill levels">
 
           <div class="skill-name">Cadence</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Quartus Prime</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">LTSpice</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Multisim</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skills-separator"></div>
 
           <div class="skill-name">Flux</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">MATLAB</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Simulink</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">LabView</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skills-separator"></div>
 
           <div class="skill-name">Cisco Packet Tracer</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Apache NetBeans IDE 17</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">SolidWorks</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Blynk</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skills-separator"></div>
 
           <div class="skill-name">Arduino IDE / Cloud IoT</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Mediapipe</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">OpenCV</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">MySQL &amp; SQLite</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span>
           </div>
 
           <div class="skills-separator"></div>
 
           <div class="skill-name">AWS</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">Altair AI Studio (RapidMiner)</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span><span class="circle-empty"></span>
           </div>
 
           <div class="skill-name">SAM3</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span>
           </div>
 
           <div class="skill-name">Qdrant</div>
-          <div class="skill-stars">
-            <span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">★</span>
+          <div class="skill-stars" aria-hidden="true">
+            <span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-filled"></span><span class="circle-empty"></span>
           </div>
 
+        </div>
+      </article>
+
+      <!-- c) Skills screenshot container -->
+      <article class="xp-card skills-card" aria-labelledby="skills-screenshot">
+        <h3 id="skills-screenshot" class="skills-subheading">Skills Screenshot</h3>
+        <div class="skills-screenshot">
+          <p>Replace this block with your screenshot image or screenshot embed when ready.</p>
         </div>
       </article>
 
@@ -534,7 +565,7 @@
         <button class="iconbtn" id="closeResumeBtn" aria-label="Close">✕</button>
       </div>
       <div class="viewer">
-        <iframe src="Resume.pdf#toolbar=0&navpanes=0&view=FitH" title="Resume PDF"></iframe>
+        <iframe src="Chin Kah Min CV_Ver15.pdf#toolbar=0&navpanes=0&view=FitH" title="Resume PDF"></iframe>
       </div>
     </div>
   </div>
